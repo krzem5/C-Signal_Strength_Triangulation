@@ -39,10 +39,12 @@ static const uint32_t _sqrt_values[192]={
 
 
 
+#ifdef __arm__
 static const uint8_t _shift_values[32]={
 	30,22,30,20,18,10,28,2,20,16,14,12,8,6,28,0,
 	22,18,10,2,16,14,6,24,12,4,8,24,4,26,26,0
 };
+#endif
 
 
 
@@ -55,14 +57,21 @@ static inline distance_t _int_abs(distance_t x){
 
 static inline uint32_t _int_sqrt(uint32_t x){
 	x|=1;
+#ifdef __arm__
 	uint32_t t=x|(x>>1);
 	t|=t>>2;
 	t|=t>>4;
 	t|=t>>8;
-	uint32_t shift=_shift_values[((t|(t>>16))*0x07c4acdd)>>27];
+	uint8_t shift=_shift_values[((t|(t>>16))*0x07c4acdd)>>27];
 	x<<=shift;
 	t=_sqrt_values[(x>>24)-64];
+	return (((t&0xff)<<7)+(((x>>16)*(t>>16)+(((x&0xffff)*(t>>16)+(x>>16)*(t&0xffff)+(((x&0xffff)*(t&0xffff))>>16))>>16))>>9))>>(shift>>1);
+#else
+	uint8_t shift=__builtin_clz(x)&0xfe;
+	x<<=shift;
+	uint32_t t=_sqrt_values[(x>>24)-64];
 	return (((t&0xff)<<7)+((uint32_t)((((uint64_t)x)*t)>>41)))>>(shift>>1);
+#endif
 }
 
 

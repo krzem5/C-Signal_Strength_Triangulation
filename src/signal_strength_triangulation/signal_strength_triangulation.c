@@ -142,11 +142,9 @@ void triangulate_antenas(antena_count_t count,const distance_t* antena_signals,t
 				}
 				z+=error;
 			}
-			z+=(next_pos&3)*error-quad_error;
-			quad_error-=error;
-			next_pos>>=2;
-			x+=(next_pos>>2)*error-quad_error;
-			y+=(next_pos&3)*error-quad_error;
+			x+=((next_pos>>4)-3)*error;
+			y+=(((next_pos>>2)&3)-3)*error;
+			z+=((next_pos&3)-4)*error;
 		}
 		base_x+=x;
 		base_y+=y;
@@ -215,11 +213,9 @@ void triangulate_point(const triangulation_state_t* state,const distance_t* ante
 			}
 			z+=error;
 		}
-		z+=(next_pos&3)*error-quad_error;
-		quad_error-=error;
-		next_pos>>=2;
-		x+=(next_pos>>2)*error-quad_error;
-		y+=(next_pos&3)*error-quad_error;
+		x+=((next_pos>>4)-3)*error;
+		y+=(((next_pos>>2)&3)-3)*error;
+		z+=((next_pos&3)-4)*error;
 	}
 	out->x=x;
 	out->y=y;

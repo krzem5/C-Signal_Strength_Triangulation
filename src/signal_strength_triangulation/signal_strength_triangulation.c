@@ -1,7 +1,6 @@
 #include <math.h>
 #include <signal_strength_triangulation.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 
 
@@ -10,7 +9,7 @@
 
 
 
-static const uint32_t _isqrt_values[192]={
+static const uint32_t _sqrt_values[192]={
 	0x02000080,0x01fc0781,0x01f81f82,0x01f44683,0x01f07c84,0x01ecc085,0x01e91386,0x01e57387,
 	0x01e1e188,0x01de5d89,0x01dae68a,0x01d77b8b,0x01d41d8c,0x01d0cb8d,0x01cd858e,0x01ca4b8f,
 	0x01c71c90,0x01c71c90,0x01c3f891,0x01c0e092,0x01bdd293,0x01bacf94,0x01b7d695,0x01b4e896,
@@ -61,7 +60,7 @@ static inline uint32_t _int_sqrt(uint32_t x){
 	t|=t>>8;
 	uint32_t shift=_shift_values[((t|(t>>16))*0x07c4acdd)>>27];
 	x<<=shift;
-	t=_isqrt_values[(x>>24)-64];
+	t=_sqrt_values[(x>>24)-64];
 	return (((t&0xff)<<7)+((uint32_t)((((uint64_t)x)*t)>>41)))>>(shift>>1);
 }
 

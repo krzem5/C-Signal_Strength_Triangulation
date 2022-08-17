@@ -26,6 +26,7 @@ int main(int argc,const char** argv){
 			printf("  %u <-> %u: %.6f | %.6f -> ~%.6f\n",i,j,dist,DISTANCE_TO_METER(antena_signals[i*(i-1)/2+j]),fabs(dist-DISTANCE_TO_METER(antena_signals[i*(i-1)/2+j])));
 		}
 	}
+	printf("{%.6f, %.6f, %.6f, ~%.6f}\n",DISTANCE_TO_METER(state._base_x),DISTANCE_TO_METER(state._base_y),DISTANCE_TO_METER(state._base_z),DISTANCE_TO_METER(state._base_error));
 	receiver_location_t receiver;
 	distance_t receiver_antena_signals[3]={
 		METER_TO_DISTANCE(2.2f),

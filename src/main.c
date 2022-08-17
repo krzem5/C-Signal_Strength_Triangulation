@@ -8,13 +8,15 @@
 #define METER_TO_DISTANCE(x) ((distance_t)((x)*768))
 #define DISTANCE_TO_METER(x) ((x)/768.0f)
 
+#define SET_SIGNAL(from,to,strength) (antena_signals[(from)*((from)-1)/2+(to)]=(strength))
+
 
 
 int main(int argc,const char** argv){
-	distance_t antena_signals[3]={
-		METER_TO_DISTANCE(4.0), // 1 <-> 0
-		METER_TO_DISTANCE(4.742362),METER_TO_DISTANCE(3.238827) // 2 <-> 0, 2 <-> 1
-	};
+	distance_t antena_signals[3];
+	SET_SIGNAL(1,0,METER_TO_DISTANCE(4.0));
+	SET_SIGNAL(2,0,METER_TO_DISTANCE(4.742362));
+	SET_SIGNAL(2,1,METER_TO_DISTANCE(3.238827));
 	triangulation_state_t state;
 	triangulate_antenas(3,antena_signals,&state);
 	for (antena_count_t i=0;i<state.count;i++){

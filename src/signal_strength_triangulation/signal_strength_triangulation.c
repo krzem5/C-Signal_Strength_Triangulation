@@ -62,9 +62,9 @@ static inline uint32_t _int_sqrt(uint32_t x){
 	t|=t>>4;
 	t|=t>>8;
 	uint8_t shift=_shift_values[((t|(t>>16))*0x07c4acdd)>>27];
-	x<<=shift;
-	t=_sqrt_values[(x>>24)-64];
-	return (((t&0xff)<<7)+(((x>>16)*(t>>16)+(((x&0xffff)*(t>>16)+(x>>16)*(t&0xffff)+(((x&0xffff)*(t&0xffff))>>16))>>16))>>9))>>(shift>>1);
+	x=(x<<shift)>>16;
+	t=_sqrt_values[(x>>8)-64];
+	return (((t&0xff)<<7)+((x*(t>>16)+((x*(t&0xffff))>>16))>>9))>>(shift>>1);
 #else
 	uint8_t shift=__builtin_clz(x)&0xfe;
 	x<<=shift;

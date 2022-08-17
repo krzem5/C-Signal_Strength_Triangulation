@@ -8,14 +8,18 @@ typedef uint8_t antena_count_t;
 
 
 
+typedef int32_t coordinate_t;
+
+
+
 typedef int32_t distance_t;
 
 
 
 typedef struct _ANTENA_LOCATION{
-	distance_t x;
-	distance_t y;
-	distance_t z;
+	coordinate_t x;
+	coordinate_t y;
+	coordinate_t z;
 } antena_location_t;
 
 
@@ -23,18 +27,18 @@ typedef struct _ANTENA_LOCATION{
 typedef struct _TRIANGULATION_STATE{
 	antena_count_t count;
 	antena_location_t* data;
-	distance_t _base_x;
-	distance_t _base_y;
-	distance_t _base_z;
+	coordinate_t _base_x;
+	coordinate_t _base_y;
+	coordinate_t _base_z;
 	distance_t _base_error;
 } triangulation_state_t;
 
 
 
 typedef struct _RECEIVER_LOCATION{
-	distance_t x;
-	distance_t y;
-	distance_t z;
+	coordinate_t x;
+	coordinate_t y;
+	coordinate_t z;
 	distance_t error;
 } receiver_location_t;
 

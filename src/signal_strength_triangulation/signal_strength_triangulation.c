@@ -1,4 +1,3 @@
-#include <math.h>
 #include <signal_strength_triangulation.h>
 #include <stdint.h>
 #include <stdlib.h>

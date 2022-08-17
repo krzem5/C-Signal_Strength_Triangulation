@@ -49,8 +49,7 @@ static const uint8_t _shift_values[32]={
 
 
 static inline distance_t _int_abs(distance_t x){
-	distance_t mask=x>>31;
-	return (x+mask)^mask;
+	return (x+(x>>31))^(x>>31);
 }
 
 

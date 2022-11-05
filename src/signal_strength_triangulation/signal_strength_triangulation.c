@@ -98,20 +98,19 @@ void triangulate_antenas(antena_count_t count,const distance_t* antena_signals,t
 		distance_t x=base_x/i;
 		distance_t y=base_y/i;
 		distance_t z=base_z/i;
-		distance_t dist_sum=0;
 		distance_t error=0;
 		distance_t max_radius=0;
 		for (antena_count_t j=0;j<i;j++){
-			distance_t dist=_int_sqrt(ANTENA_DISTANCE_SQ(j,base_x,base_y,base_z));
-			if (dist>error){
-				error=dist;
+			distance_t dist_sq=ANTENA_DISTANCE_SQ(j,base_x,base_y,base_z);
+			if (dist_sq>error){
+				error=dist_sq;
 			}
 			if (antena_signals[j]>max_radius){
 				max_radius=antena_signals[j];
 			}
-			dist_sum+=_int_abs(dist-antena_signals[j]);
 		}
-		error+=max_radius*2;
+		distance_t dist_sum=0;
+		error=_int_sqrt(error)+(max_radius<<1);
 		do{
 			distance_t quad_error=error&0xfffffffc;
 			error>>=2;
@@ -120,7 +119,7 @@ void triangulate_antenas(antena_count_t count,const distance_t* antena_signals,t
 			tmp+=error;
 			x-=tmp;
 			z+=tmp;
-			uint8_t next_pos;
+			uint8_t next_pos=0;
 			for (uint8_t j=0;j<64;j++){
 				if (!(j&3)){
 					y+=error;
@@ -155,18 +154,18 @@ void triangulate_antenas(antena_count_t count,const distance_t* antena_signals,t
 	base_x/=count;
 	base_y/=count;
 	base_z/=count;
-	distance_t base_error=0;
+	distance_t base_error_sq=0;
 	while (count){
 		count--;
-		distance_t dist=ANTENA_DISTANCE_SQ(count,base_x,base_y,base_z);
-		if (dist>base_error){
-			base_error=dist;
+		distance_t dist_sq=ANTENA_DISTANCE_SQ(count,base_x,base_y,base_z);
+		if (dist_sq>base_error_sq){
+			base_error_sq=dist_sq;
 		}
 	}
 	state->_base_x=base_x;
 	state->_base_y=base_y;
 	state->_base_z=base_z;
-	state->_base_error=_int_sqrt(base_error);
+	state->_base_error=_int_sqrt(base_error_sq);
 }
 
 
@@ -175,15 +174,14 @@ void triangulate_point(const triangulation_state_t* state,const distance_t* ante
 	distance_t x=state->_base_x;
 	distance_t y=state->_base_y;
 	distance_t z=state->_base_z;
-	distance_t dist_sum=0;
 	distance_t max_radius=0;
 	for (antena_count_t i=0;i<state->count;i++){
 		if (antena_signals[i]>max_radius){
 			max_radius=antena_signals[i];
 		}
-		dist_sum+=_int_abs(_int_sqrt(ANTENA_DISTANCE_SQ(i,x,y,z))-antena_signals[i]);
 	}
-	distance_t error=state->_base_error+max_radius*2;
+	distance_t dist_sum=0;
+	distance_t error=state->_base_error+(max_radius<<1);
 	do{
 		distance_t quad_error=error&0xfffffffc;
 		error>>=2;
@@ -192,7 +190,7 @@ void triangulate_point(const triangulation_state_t* state,const distance_t* ante
 		tmp+=error;
 		x-=tmp;
 		z+=tmp;
-		uint8_t next_pos;
+		uint8_t next_pos=0;
 		for (uint8_t i=0;i<64;i++){
 			if (!(i&3)){
 				y+=error;

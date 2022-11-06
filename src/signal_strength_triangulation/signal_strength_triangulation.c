@@ -154,18 +154,18 @@ void triangulate_antenas(antena_count_t count,const distance_t* antena_signals,t
 	base_x/=count;
 	base_y/=count;
 	base_z/=count;
-	distance_t base_error_sq=0;
+	distance_t max_dist_sq=0;
 	while (count){
 		count--;
 		distance_t dist_sq=ANTENA_DISTANCE_SQ(count,base_x,base_y,base_z);
-		if (dist_sq>base_error_sq){
-			base_error_sq=dist_sq;
+		if (dist_sq>max_dist_sq){
+			max_dist_sq=dist_sq;
 		}
 	}
 	state->_base_x=base_x;
 	state->_base_y=base_y;
 	state->_base_z=base_z;
-	state->_base_error=_int_sqrt(base_error_sq);
+	state->_base_error=_int_sqrt(max_dist_sq);
 }
 
 

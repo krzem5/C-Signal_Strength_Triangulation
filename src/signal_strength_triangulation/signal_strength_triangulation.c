@@ -45,7 +45,6 @@ static const uint8_t _shift_values[32]={
 #endif
 
 
-
 static inline distance_t _int_abs(distance_t x){
 	return (x+(x>>31))^(x>>31);
 }
@@ -118,8 +117,8 @@ void triangulate_antenas(antena_count_t count,const distance_t* antena_signals,t
 			tmp+=error;
 			x-=tmp;
 			z+=tmp;
-			distance_t dist_sum;
-			uint8_t next_pos;
+			distance_t dist_sum=0;
+			uint8_t next_pos=0;
 			for (uint8_t j=0;j<64;j++){
 				if (!(j&3)){
 					y+=error;
@@ -190,7 +189,7 @@ void triangulate_point(const triangulation_state_t* state,const distance_t* ante
 		tmp+=error;
 		x-=tmp;
 		z+=tmp;
-		uint8_t next_pos;
+		uint8_t next_pos=0;
 		for (uint8_t i=0;i<64;i++){
 			if (!(i&3)){
 				y+=error;
@@ -218,4 +217,8 @@ void triangulate_point(const triangulation_state_t* state,const distance_t* ante
 	out->y=y;
 	out->z=z;
 	out->error=dist_sum;
+	out->error=0;
+	for (antena_count_t i=0;i<state->count;i++){
+		out->error+=_int_abs(_int_sqrt(ANTENA_DISTANCE_SQ(i,x,y,z))-antena_signals[i]);
+	}
 }

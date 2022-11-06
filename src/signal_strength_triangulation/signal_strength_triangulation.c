@@ -45,6 +45,7 @@ static const uint8_t _shift_values[32]={
 #endif
 
 
+
 static inline distance_t _int_abs(distance_t x){
 	return (x+(x>>31))^(x>>31);
 }
@@ -217,8 +218,4 @@ void triangulate_point(const triangulation_state_t* state,const distance_t* ante
 	out->y=y;
 	out->z=z;
 	out->error=dist_sum;
-	out->error=0;
-	for (antena_count_t i=0;i<state->count;i++){
-		out->error+=_int_abs(_int_sqrt(ANTENA_DISTANCE_SQ(i,x,y,z))-antena_signals[i]);
-	}
 }

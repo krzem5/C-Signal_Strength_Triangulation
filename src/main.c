@@ -5,8 +5,8 @@
 
 
 
-#define METER_TO_DISTANCE(x) ((distance_t)((x)*768))
-#define DISTANCE_TO_METER(x) ((x)/768.0f)
+#define METER_TO_DISTANCE(x) ((distance_t)((x)*512))
+#define DISTANCE_TO_METER(x) ((x)/512.0f)
 
 #define SET_SIGNAL(from,to,strength) (antena_signals[(from)*((from)-1)/2+(to)]=(strength))
 
@@ -35,6 +35,7 @@ int main(int argc,const char** argv){
 		METER_TO_DISTANCE(1.9f),
 		METER_TO_DISTANCE(3.0f)
 	};
+	for (uint32_t i=0;i<10000;i++)
 	triangulate_point(&state,receiver_antena_signals,&receiver);
 	printf("(%.6f, %.6f, %.6f) -> ~%.6f\n",DISTANCE_TO_METER(receiver.x),DISTANCE_TO_METER(receiver.y),DISTANCE_TO_METER(receiver.z),DISTANCE_TO_METER(receiver.error));
 	free_triangulation_state(&state);
